@@ -1,5 +1,7 @@
 const express = require('express');
 const cors = require('cors');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
 const morgan = require('morgan');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
@@ -12,6 +14,8 @@ const { notFound, errorHandler } = require('./middleware/error');
 
 dotenv.config();
 
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
+
 if (!process.env.JWT_SECRET) {
   console.warn('⚠️ ATTENTION : JWT_SECRET n’est pas défini. Le backend utilisera la clé par défaut. Créez un fichier backend/.env avec JWT_SECRET=...');
 }
@@ -19,7 +23,23 @@ if (!process.env.JWT_SECRET) {
 connectDB().catch((err) => console.error(err));
 
 const app = express();
-app.use(cors());
+app.use(helmet());
+app.use(
+  cors({
+    origin: FRONTEND_URL,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
+  })
+);
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 120,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { message: 'Trop de requêtes. Réessayez dans quelques minutes.' }
+});
+app.use(limiter);
 app.use(express.json());
 app.use(morgan('dev'));
 

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import api from '../services/api';
 import MenuCard from '../components/MenuCard';
+import Dish3D from '../components/Dish3D';
 
 const Menu = () => {
   const [products, setProducts] = useState([]);
@@ -41,6 +42,7 @@ const Menu = () => {
           ))}
         </div>
       </div>
+      <Dish3D />
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         {displayed.map((product) => (
           <MenuCard key={product._id} product={product} />

@@ -195,6 +195,7 @@ const Admin = () => {
     try {
       const response = await api.put(`/orders/${orderId}`, { status });
       setOrders((current) => current.map((item) => (item._id === response.data._id ? response.data : item)));
+      await fetchAdminData();
       setMessage('Statut de la commande mis à jour.');
     } catch (err) {
       setError('Impossible de mettre à jour la commande.');
