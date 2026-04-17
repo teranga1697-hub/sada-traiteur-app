@@ -10,6 +10,7 @@ const productRoutes = require('./routes/products');
 const orderRoutes = require('./routes/orders');
 const adminRoutes = require('./routes/admin');
 const openingHoursRoutes = require('./routes/openingHours');
+const reviewRoutes = require('./routes/reviews');
 const { notFound, errorHandler } = require('./middleware/error');
 
 dotenv.config();
@@ -52,6 +53,7 @@ app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/opening-hours', openingHoursRoutes);
+app.use('/api/reviews', reviewRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

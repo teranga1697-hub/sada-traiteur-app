@@ -19,13 +19,13 @@ html {
 body {
   font-family: 'Merriweather', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   min-height: 100vh;
-  background-color: #f8e6bb;
+  background-color: #edf7ea;
   color: #1f2937;
 }
 
 .dark body {
-  background-color: #071a12;
-  color: #e2e8f0;
+  background-color: #1f2937;
+  color: #f8fafc;
 }
 
 button,
@@ -35,7 +35,7 @@ textarea {
 }
 
 ::selection {
-  background: #d9790b;
+  background: #f9a8d4;
   color: #fff;
 }
 

@@ -1,20 +1,50 @@
 const Order = require('../models/Order');
 
 const createOrder = async (req, res) => {
-  const { items, subtotal, paymentMethod } = req.body;
+  const { items, subtotal, paymentMethod, orderType, deliveryZone, deliveryAddress, promoCode } = req.body;
   if (!items || items.length === 0) {
     return res.status(400).json({ message: 'Le panier est vide' });
   }
+
   const serviceCharge = 200;
+  const zoneFees = {
+    Centre: 300,
+    Banlieue: 500,
+    Autre: 700,
+    Aucun: 0
+  };
+  const promoRules = {
+    SADA10: 0.1,
+    WAVE5: 0.05,
+    ORANGE20: 0.2
+  };
+  const normalizedPromo = promoCode ? promoCode.toString().trim().toUpperCase() : '';
+  let discount = 0;
+  if (normalizedPromo) {
+    if (!promoRules[normalizedPromo]) {
+      return res.status(400).json({ message: 'Code promo invalide.' });
+    }
+    discount = ((typeof subtotal === 'number' ? subtotal : 0) * promoRules[normalizedPromo]);
+  }
+
+  const deliveryFee = orderType === 'delivery' ? zoneFees[deliveryZone] || 500 : 0;
+  const resolvedAddress = orderType === 'delivery' ? deliveryAddress || 'Adresse non fournie' : 'Retrait / Emporté';
+  const subtotalValue = typeof subtotal === 'number' ? subtotal : 0;
+  const total = Math.max(subtotalValue + serviceCharge + deliveryFee - discount, 0);
+
   const order = await Order.create({
     user: req.user._id,
     items,
-    subtotal: typeof subtotal === 'number' ? subtotal : 0,
+    subtotal: subtotalValue,
     serviceCharge,
-    orderType: 'pickup',
-    total: (typeof subtotal === 'number' ? subtotal : 0) + serviceCharge,
+    deliveryFee,
+    orderType: orderType || 'pickup',
+    deliveryZone: orderType === 'delivery' ? deliveryZone || 'Centre' : 'Aucun',
+    total,
     paymentMethod,
-    deliveryAddress: 'Retrait / Emporté',
+    promoCode: normalizedPromo || null,
+    discount,
+    deliveryAddress: resolvedAddress,
     status: 'pending',
     paymentStatus: 'pending'
   });

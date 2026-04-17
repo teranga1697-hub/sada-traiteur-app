@@ -123,7 +123,7 @@ const getProducts = async (req, res) => {
 };
 
 const createProduct = async (req, res) => {
-  const { name, category, description, price, image, featured, available } = req.body;
+  const { name, category, description, price, image, featured, available, menuDay } = req.body;
 
   const product = new Product({
     name,
@@ -132,7 +132,8 @@ const createProduct = async (req, res) => {
     price,
     image,
     featured: featured || false,
-    available: available !== undefined ? available : true
+    available: available !== undefined ? available : true,
+    menuDay: menuDay || 'Aucun'
   });
 
   const createdProduct = await product.save();
@@ -141,7 +142,7 @@ const createProduct = async (req, res) => {
 
 const updateProduct = async (req, res) => {
   const { id } = req.params;
-  const { name, category, description, price, image, featured, available } = req.body;
+  const { name, category, description, price, image, featured, available, menuDay } = req.body;
 
   const product = await Product.findById(id);
 
@@ -153,6 +154,7 @@ const updateProduct = async (req, res) => {
     product.image = image || product.image;
     product.featured = featured !== undefined ? featured : product.featured;
     product.available = available !== undefined ? available : product.available;
+    product.menuDay = menuDay || product.menuDay;
 
     const updatedProduct = await product.save();
     res.json(updatedProduct);

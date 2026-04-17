@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const api = axios.create({ baseURL: '/api' });
+const baseURL = import.meta.env.VITE_BACKEND_URL || '/api';
+const api = axios.create({ baseURL });
 
 api.interceptors.request.use((config) => {
   const saved = localStorage.getItem('sadaUser');

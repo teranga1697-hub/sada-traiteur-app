@@ -4,6 +4,7 @@ const sampleProducts = [
   {
     name: 'Thiebou dieune',
     category: 'Menu du jour',
+    menuDay: 'Lundi',
     description: 'Riz au poisson riche en saveurs et épices sénégalaises.',
     price: 1000,
     image: 'https://images.unsplash.com/photo-1529691928246-7d11f8cde103?auto=format&fit=crop&w=900&q=80',
@@ -12,6 +13,7 @@ const sampleProducts = [
   {
     name: 'Mbaxal saloum',
     category: 'Menu du jour',
+    menuDay: 'Mardi',
     description: 'Poisson au tombouctou et légumes frais, plat iconique du Saloum.',
     price: 1000,
     image: 'https://images.unsplash.com/photo-1604908177520-c9f29f5fd0a8?auto=format&fit=crop&w=900&q=80'
@@ -19,6 +21,7 @@ const sampleProducts = [
   {
     name: 'Thiebou niebé',
     category: 'Menu du jour',
+    menuDay: 'Mercredi',
     description: 'Riz rouge avec haricots niébé et viande parfumée.',
     price: 1000,
     image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=900&q=80'
@@ -26,6 +29,7 @@ const sampleProducts = [
   {
     name: 'Mbaxal bou togn',
     category: 'Menu du jour',
+    menuDay: 'Jeudi',
     description: 'Poisson braisé à la sauce tomate épicée, servi avec riz.',
     price: 1000,
     image: 'https://images.unsplash.com/photo-1601924582975-bc2cc844c33d?auto=format&fit=crop&w=900&q=80'
@@ -33,6 +37,7 @@ const sampleProducts = [
   {
     name: 'Dakhine',
     category: 'Menu du jour',
+    menuDay: 'Vendredi',
     description: 'Poulet mijoté aux légumes et sauce légère, plat du terroir.',
     price: 1000,
     image: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=900&q=80'
@@ -40,6 +45,7 @@ const sampleProducts = [
   {
     name: 'Yassa poulet',
     category: 'Menu du soir',
+    menuDay: 'Samedi',
     description: 'Poulet mariné aux oignons et citron, recette traditionnelle.',
     price: 1300,
     image: 'https://images.unsplash.com/photo-1562967916-eb82221dfb37?auto=format&fit=crop&w=900&q=80',
@@ -299,8 +305,16 @@ const seedProducts = async (req, res) => {
   res.json({ message: 'Le menu existe déjà' });
 };
 
+const WEEK_DAYS = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
+
 const getAllProducts = async (req, res) => {
-  const products = await Product.find({ available: true }).sort({ category: 1, name: 1 });
+  const { today } = req.query;
+  const filter = { available: true };
+  if (today === 'true') {
+    const currentDay = WEEK_DAYS[new Date().getDay()];
+    filter.$or = [{ menuDay: currentDay }, { menuDay: 'Tous les jours' }];
+  }
+  const products = await Product.find(filter).sort({ category: 1, name: 1 });
   res.json(products);
 };
 

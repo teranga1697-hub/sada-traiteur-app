@@ -4,19 +4,25 @@ import api from '../services/api';
 
 const Home = () => {
   const [featured, setFeatured] = useState([]);
+  const [todayMenu, setTodayMenu] = useState([]);
   const [openingHours, setOpeningHours] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      const [productsRes, hoursRes] = await Promise.all([
+      const [productsRes, todayRes, hoursRes] = await Promise.all([
         api.get('/products'),
+        api.get('/products?today=true'),
         api.get('/opening-hours')
       ]);
       setFeatured(productsRes.data.filter((item) => item.featured).slice(0, 3));
+      setTodayMenu(todayRes.data);
       setOpeningHours(hoursRes.data);
     };
     fetchData();
   }, []);
+
+  const todayName = new Date().toLocaleDateString('fr-FR', { weekday: 'long' });
+  const isWeekend = ['samedi', 'dimanche'].includes(todayName.toLowerCase());
 
   return (
     <section className="mx-auto max-w-7xl px-4 pt-10 sm:px-6">
@@ -33,6 +39,12 @@ const Home = () => {
               <Link to="/contact" className="rounded-full border border-sadaGreen px-7 py-4 text-sm font-semibold text-slate-950 transition hover:bg-sadaSand hover:text-slate-900 dark:border-slate-700 dark:text-slate-100 dark:hover:bg-slate-800">
                 Nous contacter
               </Link>
+            </div>
+            <div className="rounded-[2rem] border border-sadaGreen/20 bg-sadaGreen/10 px-6 py-4 text-slate-950 shadow-lg">
+              <p className="text-sm uppercase tracking-[0.24em] text-sadaGreen">Notification</p>
+              <p className="mt-3 text-base font-semibold">Menu du jour disponible 🔥</p>
+              <p className="mt-2 text-sm text-slate-700">Découvrez le menu spécial de {todayName} et commandez rapidement sur WhatsApp.</p>
+              {isWeekend && <p className="mt-2 text-sm text-slate-700">Promo du week-end active : profitez de livraisons plus rapides et d’offres exclusives.</p>}
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="rounded-[2rem] bg-sadaSand p-6 shadow-xl ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-700">
@@ -51,15 +63,30 @@ const Home = () => {
               <p className="mt-3 text-sm text-slate-200">Nos plats les plus populaires, sélectionnés avec soin pour une expérience gustative authentique.</p>
               <div className="mt-6 grid gap-4">
               {featured.length === 0 ? (
-                <div className="rounded-3xl bg-slate-900/70 p-4 text-sm text-slate-200">Chargement des spécialités...</div>
+                <div className="rounded-3xl bg-rose-50/90 p-4 text-sm text-slate-950">Chargement des spécialités...</div>
               ) : (
                 featured.map((product) => (
-                  <div key={product._id} className="rounded-3xl bg-slate-900/80 p-4 backdrop-blur-sm transition hover:-translate-y-1">
-                    <h3 className="font-semibold text-slate-100">{product.name}</h3>
+                  <div key={product._id} className="rounded-3xl bg-rose-50/90 p-4 backdrop-blur-sm transition hover:-translate-y-1">
+                    <h3 className="font-semibold text-slate-950">{product.name}</h3>
                     <p className="mt-1 text-sm text-slate-300 line-clamp-2">{product.description}</p>
                     <span className="mt-3 inline-flex rounded-full bg-sadaYellow px-3 py-1 text-sm font-semibold text-slate-900">{product.price.toFixed(2)} €</span>
                   </div>
                 ))
+              )}
+            </div>
+            <div className="mt-6 rounded-[2rem] bg-slate-900/80 p-6 text-slate-100">
+              <h3 className="text-lg font-semibold">Menu du {todayName}</h3>
+              {todayMenu.length === 0 ? (
+                <p className="mt-3 text-sm text-slate-300">Aucun plat spécial n’est encore défini pour aujourd’hui.</p>
+              ) : (
+                <div className="mt-4 space-y-3">
+                  {todayMenu.map((item) => (
+                    <div key={item._id} className="rounded-3xl bg-rose-50/90 p-4">
+                      <p className="font-semibold">{item.name}</p>
+                      <p className="mt-1 text-sm text-slate-400">{item.price.toFixed(2)} €</p>
+                    </div>
+                  ))}
+                </div>
               )}
             </div>
           </div>
@@ -99,6 +126,27 @@ const Home = () => {
         <div className="rounded-[2rem] bg-sadaSand p-8 shadow-xl ring-1 ring-slate-200 dark:bg-slate-900 dark:ring-slate-700">
           <h3 className="text-xl font-semibold text-slate-950 dark:text-slate-100">Service professionnel</h3>
           <p className="mt-4 text-sm leading-7 text-slate-700 dark:text-slate-400">Un tableau de bord administratif complet pour suivre les commandes, les finances et les clients.</p>
+        </div>
+      </div>
+      <div className="mt-10 rounded-[2rem] bg-white/90 p-8 shadow-2xl ring-1 ring-slate-200 dark:bg-slate-950/80 dark:ring-slate-700">
+        <h3 className="text-2xl font-bold text-slate-950 dark:text-slate-100">Nos réseaux sociaux</h3>
+        <p className="mt-3 text-sm text-slate-600 dark:text-slate-400">Découvrez nos dernières vidéos et inspirations TikTok / Instagram directement depuis la page d’accueil.</p>
+        <div className="mt-6 grid gap-4 md:grid-cols-3">
+          <a href="https://www.tiktok.com/@sadatraiteur" target="_blank" rel="noreferrer" className="group overflow-hidden rounded-[2rem] border border-slate-200 bg-slate-50 p-6 transition hover:border-sadaOrange hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:hover:bg-slate-800">
+            <div className="h-40 rounded-3xl bg-slate-900/80" />
+            <h4 className="mt-4 text-lg font-semibold text-slate-950 dark:text-slate-100">TikTok</h4>
+            <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">Nos recettes, coulisses et offres spéciales.</p>
+          </a>
+          <a href="https://www.instagram.com/sadatraiteur/" target="_blank" rel="noreferrer" className="group overflow-hidden rounded-[2rem] border border-slate-200 bg-slate-50 p-6 transition hover:border-sadaOrange hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:hover:bg-slate-800">
+            <div className="h-40 rounded-3xl bg-slate-900/80" />
+            <h4 className="mt-4 text-lg font-semibold text-slate-950 dark:text-slate-100">Instagram</h4>
+            <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">Nos plats, événements et avis clients.</p>
+          </a>
+          <a href="https://whatsapp.com/channel/0029Vb6VAFyADTOEZK0BYp2s" target="_blank" rel="noreferrer" className="group overflow-hidden rounded-[2rem] border border-slate-200 bg-slate-50 p-6 transition hover:border-sadaOrange hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:hover:bg-slate-800">
+            <div className="h-40 rounded-3xl bg-slate-900/80" />
+            <h4 className="mt-4 text-lg font-semibold text-slate-950 dark:text-slate-100">Chaîne WhatsApp</h4>
+            <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">Rejoignez notre chaîne pour recevoir les offres et commander directement.</p>
+          </a>
         </div>
       </div>
     </section>

@@ -25,7 +25,7 @@ const Admin = () => {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const [editingProduct, setEditingProduct] = useState(null);
-  const [productForm, setProductForm] = useState({ name: '', category: 'Plat du jour', description: '', price: 0, image: '' });
+  const [productForm, setProductForm] = useState({ name: '', category: 'Plat du jour', description: '', price: 0, image: '', menuDay: 'Aucun' });
   const [financeForm, setFinanceForm] = useState({ title: '', amount: 0, type: 'revenue', category: 'Général', note: '', date: '' });
   const [isLoading, setIsLoading] = useState(false);
 
@@ -76,7 +76,7 @@ const Admin = () => {
 
   const resetForm = () => {
     setEditingProduct(null);
-    setProductForm({ name: '', category: 'Plat du jour', description: '', price: 0, image: '' });
+    setProductForm({ name: '', category: 'Plat du jour', description: '', price: 0, image: '', menuDay: 'Aucun' });
   };
 
   const handleImageUpload = (event) => {
@@ -115,7 +115,8 @@ const Admin = () => {
       category: product.category,
       description: product.description,
       price: product.price,
-      image: product.image
+      image: product.image,
+      menuDay: product.menuDay || 'Aucun'
     });
     setActiveTab('menu');
   };
@@ -405,7 +406,7 @@ const Admin = () => {
                       <div className="flex flex-col gap-4">
                         <div>
                           <p className="text-lg font-semibold text-slate-900 dark:text-slate-100">{product.name}</p>
-                          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{product.category}</p>
+                          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{product.category} {product.menuDay && product.menuDay !== 'Aucun' ? `· ${product.menuDay}` : ''}</p>
                           <p className="mt-3 text-sm text-slate-600 dark:text-slate-400 line-clamp-2">{product.description}</p>
                         </div>
                         <div className="flex flex-wrap items-center gap-2">
@@ -436,6 +437,20 @@ const Admin = () => {
                     <option>Plat du soir</option>
                     <option>Spécialités</option>
                     <option>Jus locaux</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">Menu du jour</label>
+                  <select value={productForm.menuDay} onChange={(e) => setProductForm({ ...productForm, menuDay: e.target.value })} className="mt-2 w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none focus:border-sadaOrange dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100">
+                    <option value="Aucun">Aucun</option>
+                    <option value="Lundi">Lundi</option>
+                    <option value="Mardi">Mardi</option>
+                    <option value="Mercredi">Mercredi</option>
+                    <option value="Jeudi">Jeudi</option>
+                    <option value="Vendredi">Vendredi</option>
+                    <option value="Samedi">Samedi</option>
+                    <option value="Dimanche">Dimanche</option>
+                    <option value="Tous les jours">Tous les jours</option>
                   </select>
                 </div>
                 <div>

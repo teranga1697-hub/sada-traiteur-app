@@ -51,6 +51,12 @@ const OrderStatus = () => {
                     </div>
                     <div className="rounded-full bg-slate-950/90 px-4 py-2 text-sm font-semibold text-sadaYellow">Total : {order.total.toLocaleString('fr-FR')} FCFA</div>
                   </div>
+                  <div className="mt-5 space-y-3 rounded-[1.5rem] bg-slate-100 p-4 text-sm text-slate-700 dark:bg-slate-900 dark:text-slate-300">
+                    <p>Mode de paiement : <span className="font-semibold text-slate-950 dark:text-slate-100">{order.paymentMethod}</span></p>
+                    {order.promoCode && <p>Code promo : <span className="font-semibold text-slate-950 dark:text-slate-100">{order.promoCode}</span></p>}
+                    <p>Montant : <span className="font-semibold text-slate-950 dark:text-slate-100">{order.total.toLocaleString('fr-FR')} FCFA</span></p>
+                    <p>Livraison : <span className="font-semibold text-slate-950 dark:text-slate-100">{order.deliveryZone}</span></p>
+                  </div>
                   <div className="mt-5 h-4 overflow-hidden rounded-full bg-slate-200">
                     <div className="h-full rounded-full bg-gradient-to-r from-sadaOrange via-sadaRed to-sadaGreen" style={{ width: `${getProgress(order.status)}%` }} />
                   </div>
