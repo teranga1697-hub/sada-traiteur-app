@@ -41,30 +41,30 @@ const Auth = () => {
           {isRegister && (
             <div>
               <label className="block text-sm font-medium text-slate-700">Nom complet</label>
-              <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required className="mt-2 w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none focus:border-sadaOrange" />
+              <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required className="mt-2 w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none focus:border-sadaOrange" />
             </div>
           )}
           <div>
             <label className="block text-sm font-medium text-slate-700">Email</label>
-            <input value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} type="email" required className="mt-2 w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none focus:border-sadaOrange" />
+            <input value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} type="email" required className="mt-2 w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none focus:border-sadaOrange" />
           </div>
           <div>
             <label className="block text-sm font-medium text-slate-700">Mot de passe</label>
-            <input value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} type="password" required className="mt-2 w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none focus:border-sadaOrange" />
+            <input value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} type="password" required className="mt-2 w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none focus:border-sadaOrange" />
           </div>
           {isRegister && (
             <>
               <div>
                 <label className="block text-sm font-medium text-slate-700">Téléphone WhatsApp</label>
-                <input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} className="mt-2 w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none focus:border-sadaOrange" />
+                <input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} className="mt-2 w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none focus:border-sadaOrange" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-700">Adresse</label>
-                <input value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} className="mt-2 w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none focus:border-sadaOrange" />
+                <input value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} className="mt-2 w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none focus:border-sadaOrange" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-700">Code administrateur (optionnel)</label>
-                <input value={form.adminCode} onChange={(e) => setForm({ ...form, adminCode: e.target.value })} type="password" placeholder="Laissez vide pour un compte client" className="mt-2 w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none focus:border-sadaOrange" />
+                <input value={form.adminCode} onChange={(e) => setForm({ ...form, adminCode: e.target.value })} type="password" placeholder="Laissez vide pour un compte client" className="mt-2 w-full rounded-3xl border border-slate-200 bg-slate-50 px-4 py-3 text-slate-900 outline-none focus:border-sadaOrange" />
               </div>
             </>
           )}
