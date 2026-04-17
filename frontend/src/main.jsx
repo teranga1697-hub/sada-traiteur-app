@@ -7,12 +7,14 @@ import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { ThemeProvider } from './context/ThemeContext';
 
+const basename = import.meta.env.PROD ? '/sada-traiteur-app/' : '/';
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <ThemeProvider>
       <AuthProvider>
         <CartProvider>
-          <BrowserRouter>
+          <BrowserRouter basename={basename}>
             <App />
           </BrowserRouter>
         </CartProvider>
